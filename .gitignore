@@ -1,0 +1,32 @@
+# Entornos virtuales
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Variables de entorno y secretos
+.env
+.env.*
+!.env.example
+
+# Datos locales de la aplicación
+uploads/*
+!uploads/.gitkeep
+frase_del_dia.json
+
+# Logs y archivos temporales
+*.log
+*.tmp
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
