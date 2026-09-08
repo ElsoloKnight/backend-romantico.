@@ -20,14 +20,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configuración de tu base de datos local
+# Configuración de PostgreSQL. Render puede usar DATABASE_URL; localmente se usan
+# los valores por defecto de la instalación de PostgreSQL del proyecto.
 DB_CONFIG = {
-    "dbname": "app_romantica",
-    "user": "elsoloknight",  # Tu usuario de la Mac
-    "password": "",          # En Mac con Homebrew no pide contraseña
-    "host": "localhost",
-    "port": "5432"
+    "dbname": os.getenv("DB_NAME", "app_romantica"),
+    "user": os.getenv("DB_USER", "elsoloknight"),
+    "password": os.getenv("DB_PASSWORD", ""),
+    "host": os.getenv("DB_HOST", "localhost"),
+    "port": os.getenv("DB_PORT", "5432"),
 }
+
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Crear carpeta para guardar fotos físicas
 os.makedirs("uploads", exist_ok=True)
@@ -39,6 +42,8 @@ FRASE_POR_DEFECTO = "No importa qué pase hoy, recuerda que eres increíble."
 
 # Función auxiliar para conectarnos a la BD
 def obtener_conexion():
+    if DATABASE_URL:
+        return psycopg2.connect(DATABASE_URL)
     return psycopg2.connect(**DB_CONFIG)
 
 
