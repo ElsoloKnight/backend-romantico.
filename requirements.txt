@@ -2,3 +2,5 @@ fastapi
 uvicorn
 psycopg2-binary
 python-multipart
+PyJWT
+httpx[http2]
