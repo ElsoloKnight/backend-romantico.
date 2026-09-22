@@ -87,6 +87,9 @@ def inicializar_base_de_datos():
                 ON CONFLICT (tipo) DO NOTHING;
                 """
             )
+            # Forzamos la inserción individual en caso de que la tabla ya exista de antes
+            cursor.execute("INSERT INTO contadores (tipo, valor) VALUES ('buen_dia', 0) ON CONFLICT (tipo) DO NOTHING;")
+            cursor.execute("INSERT INTO contadores (tipo, valor) VALUES ('te_admira', 0) ON CONFLICT (tipo) DO NOTHING;")
         conn.commit()
     finally:
         conn.close()
