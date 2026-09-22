@@ -83,7 +83,7 @@ def inicializar_base_de_datos():
                 ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS plataforma TEXT NOT NULL DEFAULT 'expo';
                 ALTER TABLE push_tokens ADD COLUMN IF NOT EXISTS bundle_id TEXT;
                 INSERT INTO contadores (tipo, valor) VALUES
-                    ('te_extrano', 0), ('toma_agua', 0), ('te_amo', 0)
+                    ('te_extrano', 0), ('toma_agua', 0), ('te_amo', 0), ('buen_dia', 0), ('te_admira', 0)
                 ON CONFLICT (tipo) DO NOTHING;
                 """
             )
