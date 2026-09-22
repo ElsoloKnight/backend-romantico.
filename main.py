@@ -134,6 +134,12 @@ ESTADO_USUARIO = {
     "roro": {"animo": "normal", "estres": "normal"},
 }
 
+# Estado de la última vez que el usuario abrió la app (timestamp)
+ULTIMO_ACCESO = {
+    "juan_carlos": 0.0,
+    "roro": 0.0,
+}
+
 
 def usuario_contrario(usuario: str) -> str:
     return "roro" if usuario == "juan_carlos" else "juan_carlos"
@@ -317,6 +323,26 @@ def cambiar_frase(frase: FraseNueva):
         json.dump({"fecha": hoy, "texto": texto}, archivo, ensure_ascii=False, indent=2)
 
     return {"frase": texto, "puede_cambiar": False}
+
+# --- RUTAS PARA SABER SI ESTÁN EN LÍNEA ---
+@app.post("/ping")
+def hacer_ping(usuario: str | None = Header(default=None, alias="X-Usuario")):
+    clave = (usuario or "").strip().lower()
+    if clave in ULTIMO_ACCESO:
+        ULTIMO_ACCESO[clave] = time.time()
+    return {"ok": True}
+
+@app.get("/online/{usuario}")
+def saber_si_esta_online(usuario: str):
+    clave = usuario.strip().lower()
+    if clave not in ULTIMO_ACCESO:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+    # Si hizo ping en los últimos 20 segundos, consideramos que está en la app
+    tiempo_pasado = time.time() - ULTIMO_ACCESO[clave]
+    esta_online = tiempo_pasado < 20
+
+    return {"usuario": clave, "online": esta_online}
 
 # --- RUTAS PARA CONTADORES ---
 @app.get("/contadores")
